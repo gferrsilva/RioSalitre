@@ -259,15 +259,20 @@ write.csv(k3["cluster"], "cluster.csv")
 fviz_cluster(k3,
              data = df_num,
              axes = c(1,2))
-#####################################
-##REFERENCES
-#####################################
+# REFERENCES
+## Papers
+Kruskal, William H.; Wallis, W. Allen (1 de dezembro de 1952). Use of Ranks in One-Criterion Variance Analysis. Journal of the American Statistical Association. 47 (260): 583–621. ISSN 0162-1459. doi:10.1080/01621459.1952.10483441
 
-# Shapiro, S. S.; Wilk, M. B. (1965). An analysis of variance test for normality (complete samples). Biometrika. 52 (3–4): 591–611. doi:10.1093/biomet/52.3-4.591. JSTOR 2333709. MR 0205384. p. 593
-# Kruskal, William H.; Wallis, W. Allen (1 de dezembro de 1952). Use of Ranks in One-Criterion Variance Analysis. Journal of the American Statistical Association. 47 (260): 583–621. ISSN 0162-1459. doi:10.1080/01621459.1952.10483441
-# Razali, Nornadiah; Wah, Yap Bee (2011). "Power comparisons of Shapiro–Wilk, Kolmogorov–Smirnov, Lilliefors and Anderson–Darling tests". Journal of Statistical Modeling and Analytics. 2 (1): 21–33
+Razali, Nornadiah; Wah, Yap Bee (2011). "Power comparisons of Shapiro–Wilk, Kolmogorov–Smirnov, Lilliefors and Anderson–Darling tests". Journal of Statistical Modeling and Analytics. 2 (1): 21–33
 
-# https://towardsdatascience.com/dimensionality-reduction-does-pca-really-improve-classification-outcome-6e9ba21f0a32
-# https://medium.com/apprentice-journal/pca-application-in-machine-learning-4827c07a61db
-# https://uc-r.github.io/kmeans_clustering
-# http://www.sthda.com/english/wiki/visualize-correlation-matrix-using-correlogram
+Shapiro, S. S.; Wilk, M. B. (1965). An analysis of variance test for normality (complete samples). Biometrika. 52 (3–4): 591–611. doi:10.1093/biomet/52.3-4.591. JSTOR 2333709. MR 0205384. p. 593
+
+## Website
+## Correlation Matrix
+http://www.sthda.com/english/wiki/visualize-correlation-matrix-using-correlogram
+### PCA
+https://towardsdatascience.com/dimensionality-reduction-does-pca-really-improve-classification-outcome-6e9ba21f0a32
+### PCA for Machine Learning
+https://medium.com/apprentice-journal/pca-application-in-machine-learning-4827c07a61db
+### K-Means Clustering
+https://uc-r.github.io/kmeans_clustering
