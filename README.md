@@ -1,9 +1,8 @@
 # K-Means-clustering-based-in-pXRF-data-in-fine-grained-rocks
 
 setwd("C:/Users/guilherme.ferreira/Desktop/Salitre")
-#####################################
-# Carregando e preparando dados
-#####################################
+
+## Carregando e preparando dados
 
 library(readr)
 library(tidyverse)
@@ -17,24 +16,24 @@ trash <- c("Index", "Date", "Duration", "CORE", "Time")
 df_raw <- df_raw %>%
   select(-trash)
 
-#Gerando o Resumo estatístico
+# Gerando o Resumo estatístico
 
 df_summary <- t(do.call(rbind,lapply(df_raw, summary)))
 write.csv(df_summary, "df_summary.csv")
 
-#Corrigindo o tipo de variável no banco de dados
+# Corrigindo o tipo de variável no banco de dados
 
 for (i in 3:length(df_raw)) {
   df_raw[[i]] <- as.numeric(df_raw[[i]])
 }
 
-#Selecionando as variáveis que possuem mais de cut de valores acima do limite de detecção
+# Selecionando as variáveis que possuem mais de cut de valores acima do limite de detecção
 
 cut <- .75
 df <- df_raw %>%
   select_if(~sum(!is.na(.x)) >= (cut * nrow(df_raw)))
 
-#Substituindo os valores ausentes por metade do mínimo de cada coluna
+# Substituindo os valores ausentes por metade do mínimo de cada coluna
 
 minimo <- {}
 for (i in 3:length(df)) {
@@ -45,11 +44,9 @@ for (i in 3:length(df)) {
   df[[i]] <- replace_na(df[[i]], .5*minimo[[i]])
 }
 
-#####################################
 # Normalizando os dados 
-#####################################
 
-# Normalizando pela amplitude
+### Normalizando pela amplitude
 normalize <- function(x) {
   return ((x - min(x, na.rm = TRUE)) / (max(x, na.rm = T) - min(x, na.rm = T)))
 }
