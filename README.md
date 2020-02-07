@@ -181,6 +181,20 @@ df_log <- df %>%
 
 df_log <- bind_cols(labels, as_data_frame(df_log))
 ```
+Output:
+```
+# A tibble: 6 x 27
+  SAMPLE TYPE     Zr    Sr     W    Cu    Ni    Fe    Cr     V    Ti     Sc     K     S    Nd    Pr
+  <chr>  <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl> <dbl> <dbl>
+1 apa20~ S      1.96  1.74  3.31  2.86  3.17  3.85  1.14 0.471  1.50  0.407  2.83  3.83  2.78  2.57
+2 apa20~ D      1.95  1.72  3.31  2.86  3.23  3.87  1.15 0.551  1.44  0.292  2.80  3.77  2.84  2.59
+3 apa20~ S      1.80  1.56  3.27  2.79  3.11  4.04  1.09 0.641  1.57  0.283  2.84  3.78  2.91  2.85
+4 apa20~ D      1.84  1.58  3.27  2.81  3.15  3.99  1.11 0.625  1.59  0.375  2.84  3.77  2.85  2.75
+5 apa20~ S      1.96  1.79  3.27  2.83  3.11  4.01  1.13 0.739  1.69  0.529  2.85  3.75  2.95  2.68
+6 apa20~ D      1.87  1.96  3.25  2.79  3.12  3.88  1.10 0.508  1.52 -0.187  2.82  3.75  2.81  2.60
+# ... with 11 more variables: La <dbl>, Ba <dbl>, Sb <dbl>, Sn <dbl>, Cd <dbl>, Bal <dbl>, P <dbl>,
+#   Si <dbl>, Cl <dbl>, Cs <dbl>, Te <dbl>
+```
 # 3. DATA MANIPULATION
 ## 3.1 Splitting samples and duplicates
 ``` R
@@ -290,7 +304,7 @@ ggplot(long, aes(sample = measure, col = Group)) +
   scale_fill_continuous(name = "Group", labels = c("Duplicate", "Measure")) +
   facet_wrap(~element, scale = "free") + scale_color_discrete(name = "Group", labels = c("Duplicate", "Measure"))
 ```
-[!png] 
+![png](figures/density_plot.png) 
 # 5.2 Density plot of Sample and Duplicate
 
 ``` R
