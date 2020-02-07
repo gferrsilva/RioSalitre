@@ -16,13 +16,16 @@ library(readr)
 library(dplyr)
 library(ggplot2)
 library(hrbrthemes)
-
-df_raw <- read_tsv("Salitre.txt")
+library(corrplot)
+library(factoextra)
+set.seed(123)
 ```
   ## 1.2 Data Preparation
 Discarding irrelevant Factor Variables
 
 ``` R
+df_raw <- read_tsv("Salitre.txt")
+
 trash <- c("Index", "Date", "Duration", "CORE", "Time")
 
 df_raw <- df_raw %>%
@@ -61,7 +64,7 @@ for (i in 3:length(df)) {
 
 # 2. DATA SCALING 
 
-## 2.1 0-1 Amplitude normalization
+## 2.1 Amplitude normalization
 ``` R
 normalize <- function(x) {
   return ((x - min(x, na.rm = TRUE)) / (max(x, na.rm = T) - min(x, na.rm = T)))
@@ -74,9 +77,24 @@ df_norm <- df %>%
   sapply(FUN = normalize)
 
 df_norm <- bind_cols(labels, as_data_frame(df_norm))
-```
 
-## 2.2 Log10 Transformation
+head(df_norm)
+```
+Output:
+```
+# A tibble: 6 x 27
+  SAMPLE TYPE     Zr    Sr     W    Cu    Ni     Fe     Cr      V     Ti     Sc      K     S    Nd
+  <chr>  <chr> <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl> <dbl> <dbl>
+1 apa20~ S     0.205 0.266 0.599 0.451 0.549 0.0793 0.0843 0.0862 0.0618 0.0943 0.0201 0.159 0.356
+2 apa20~ D     0.198 0.255 0.590 0.452 0.628 0.0828 0.0857 0.114  0.0524 0.0650 0.0182 0.135 0.427
+3 apa20~ S     0.137 0.173 0.529 0.368 0.475 0.129  0.0705 0.152  0.0726 0.0631 0.0210 0.140 0.524
+4 apa20~ D     0.152 0.180 0.531 0.387 0.519 0.113  0.0752 0.144  0.0763 0.0854 0.0217 0.136 0.444
+5 apa20~ S     0.203 0.300 0.538 0.416 0.473 0.118  0.0811 0.202  0.0990 0.136  0.0219 0.127 0.585
+6 apa20~ D     0.161 0.446 0.503 0.372 0.483 0.0839 0.0719 0.0982 0.0639 0      0.0197 0.129 0.386
+# ... with 12 more variables: Pr <dbl>, La <dbl>, Ba <dbl>, Sb <dbl>, Sn <dbl>, Cd <dbl>, Bal <dbl>,
+#   P <dbl>, Si <dbl>, Cl <dbl>, Cs <dbl>, Te <dbl>
+```
+## 2.2 Log Transformation
 ``` R
 labels <- df %>% select(SAMPLE, TYPE)
 
@@ -137,6 +155,22 @@ t(do.call(rbind,
                  function(x) shapiro.test(x)[c("statistic", "p.value")]
           )))
 ```
+Output:
+```
+          Zr           Sr           W            Cu           Ni           Fe           Cr          
+statistic 0.8922746    0.6953068    0.8343817    0.8757685    0.9050847    0.8931482    0.6540958   
+p.value   8.357584e-16 8.777475e-26 1.293297e-19 5.112535e-17 9.089255e-15 9.770249e-16 3.519157e-27
+          V            Ti           Sc           K            S           Nd           Pr          
+statistic 0.8077025    0.768408     0.6508929    0.7614976    0.6405334   0.9818664    0.9724514   
+p.value   4.828141e-21 6.770853e-23 2.776015e-27 3.387864e-23 1.30379e-27 9.504289e-05 1.150519e-06
+          La           Ba           Sb           Sn           Cd           Bal         P           
+statistic 0.9364157    0.9769057    0.9512631    0.9617951    0.9707346    0.3565725   0.931491    
+p.value   9.635029e-12 8.306087e-06 6.013767e-10 1.881325e-08 5.620156e-07 1.40641e-34 2.816869e-12
+          Si           Cl           Cs           Te        
+statistic 0.4730813    0.7995515    0.9845759    0.9905358 
+p.value   4.281468e-32 1.893626e-21 0.0004077478 0.01435178
+
+```
 
 ## 4.2 Equivalence of data and duplicates
 Kruskal-Wallis (Kruskal & Wallis, 1952)
@@ -150,6 +184,19 @@ t(do.call(rbind,
                  g = factor(df$TYPE),
                  function (x, g) kruskal.test(x, g)[c("statistic",
                                                       "p.value")])))
+```
+Output:
+
+```
+          TYPE       Zr         Sr         W         Cu        Ni        Fe        Cr        
+statistic 383        0.06917833 0.02232867 0.7173547 0.1936311 0.2933421 1.135893  0.07686608
+p.value   2.7658e-85 0.7925369  0.8812161  0.397013  0.6599115 0.5880867 0.2865218 0.7815902 
+          V         Ti        Sc        K         S         Nd        Pr         La         Ba       
+statistic 0.1944266 0.2265028 2.487362  0.284446  2.002724  0.8635429 0.08772136 0.03776917 0.1948168
+p.value   0.6592577 0.6341291 0.1147639 0.5938019 0.1570168 0.3527491 0.7670942  0.8459074  0.6589375
+          Sb        Sn        Cd         Bal        P          Si        Cl        Cs        Te      
+statistic 0.1516571 0.560968  0.07235625 3.591698   0.06819939 1.719424  1.859628  1.505758  1.815892
+p.value   0.6969568 0.4538705 0.7879365  0.05806888 0.7939767  0.1897673 0.1726677 0.2197875 0.177803
 ```
 
 # 5. DATA VISUALIZATION
