@@ -1,20 +1,22 @@
 # K-Means-clustering-based-in-pXRF-data-in-fine-grained-rocks
 
-setwd("C:/Users/guilherme.ferreira/Desktop/Salitre")
-
-## Carregando e preparando dados
-
+  ## Data preparation
+``` R
 library(readr)
 library(tidyverse)
 
 df_raw <- read_tsv("Salitre.txt")
 
-#Discartando colunas que não interessam
-
 trash <- c("Index", "Date", "Duration", "CORE", "Time")
 
 df_raw <- df_raw %>%
   select(-trash)
+```
+
+
+#Discartando colunas que não interessam
+
+
 
 # Gerando o Resumo estatístico
 
