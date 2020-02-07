@@ -200,7 +200,14 @@ sam <- df_norm %>%
 dup <- df_norm %>%
   filter(TYPE == "D")
 ```
+## 3.2 Selecting only the numerical variables
 
+``` R
+df_num <- select(sam,-SAMPLE) %>%
+  select(-TYPE)
+
+write.csv(df_num, "salitre_norm.csv")
+```
 ## 3.2 Converting in Long Data Frame
 ``` R
 descarte <- c("Cl", "P", "Bal", "Sc", "Sn", "Cd", "Sb", "Te", "Ba", "Cs") # ver código abaixo
@@ -216,16 +223,19 @@ d_long <- dup %>%
 
 long <- full_join(s_long, d_long) %>%
   rename(Group = TYPE)
+  
+glimpse(long)
+```
+Output:
+```
+Observations: 5,760
+Variables: 4
+$ SAMPLE  <chr> "apa2001-004.12-1", "apa2001-005.39-1", "apa2001-006.00-1", "apa2001-007.20-1", "a...
+$ Group   <chr> "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S...
+$ element <chr> "Zr", "Zr", "Zr", "Zr", "Zr", "Zr", "Zr", "Zr", "Zr", "Zr", "Zr", "Zr", "Zr", "Zr"...
+$ measure <dbl> 0.20468861, 0.13743784, 0.20345726, 0.19303812, 0.18446602, 0.17125266, 0.13279659...
 ```
 
-## 3.3 Selecting only the numerical variables
-
-``` R
-df_num <- select(sam,-SAMPLE) %>%
-  select(-TYPE)
-
-write.csv(df_num, "salitre_norm.csv")
-```
 # 4. STATISTICAL SIGNIFICANCE VERIFICATION
 
 ## 4.1 Check of distribution
@@ -348,7 +358,7 @@ Output:
 ```R
 df_pca <- prcomp(df_num, center = TRUE, scale. = TRUE)
 ```
-Output
+Output:
 ```
 Importance of components:
                           PC1    PC2    PC3    PC4     PC5     PC6     PC7     PC8     PC9    PC10
