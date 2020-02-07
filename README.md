@@ -9,14 +9,17 @@ Directory of Geology and Mineral Resources, Geological Survey of Brazil – CPRM
 ORCiD https://orcid.org/0000-0002-3675-7289
 guilherme.ferreira@cprm.gov.br
 
-  # Set up
-  ## Reading Data
+  # 1. SETTINGS
+  ## 1.1 Reading Data
 ``` R
-library(tidyverse)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(hrbrthemes)
 
 df_raw <- read_tsv("Salitre.txt")
 ```
-  ## Data Preparation
+  ## 1.2 Data Preparation
 Discarding irrelevant Factor Variables
 
 ``` R
@@ -56,9 +59,9 @@ for (i in 3:length(df)) {
 }
 ```
 
-# Data Scaling 
+# 2. DATA SCALING 
 
-0-1 Amplitude normalization
+## 2.1 0-1 Amplitude normalization
 ``` R
 normalize <- function(x) {
   return ((x - min(x, na.rm = TRUE)) / (max(x, na.rm = T) - min(x, na.rm = T)))
@@ -73,7 +76,7 @@ df_norm <- df %>%
 df_norm <- bind_cols(labels, as_data_frame(df_norm))
 ```
 
-Log10 Transformation
+## 2.2 Log10 Transformation
 ``` R
 labels <- df %>% select(SAMPLE, TYPE)
 
@@ -84,8 +87,8 @@ df_log <- df %>%
 
 df_log <- bind_cols(labels, as_data_frame(df_log))
 ```
-# Data frame manipulation
-Splitting samples from duplicates
+# 3. DATA MANIPULATION
+## 3.1 Splitting samples and duplicates
 ``` R
 sam <- df_norm %>%
   filter(TYPE == "S")
@@ -94,7 +97,7 @@ dup <- df_norm %>%
   filter(TYPE == "D")
 ```
 
-Converting in Long Data Frame
+## 3.2 Converting in Long Data Frame
 ``` R
 descarte <- c("Cl", "P", "Bal", "Sc", "Sn", "Cd", "Sb", "Te", "Ba", "Cs") # ver código abaixo
 
@@ -111,8 +114,17 @@ long <- full_join(s_long, d_long) %>%
   rename(Group = TYPE)
 ```
 
-# Statistical Significance Verification
+## 3.3 Selecting only the numerical variables
 
+``` R
+df_num <- select(sam,-SAMPLE) %>%
+  select(-TYPE)
+
+write.csv(df_num, "salitre_norm.csv")
+```
+# 4. STATISTICAL SIGNIFICANCE VERIFICATION
+
+## 4.1 Check of distribution
 Shapiro-Wilk test (Shapiro & Wilk, 1965; Razali & Wah, 2011)
 
 For alpha defined as 5%, this test checks if the data sample is normally distributed
@@ -125,6 +137,8 @@ t(do.call(rbind,
                  function(x) shapiro.test(x)[c("statistic", "p.value")]
           )))
 ```
+
+## 4.2 Equivalence of data and duplicates
 Kruskal-Wallis (Kruskal & Wallis, 1952)
 
 For alhpa defined as 5%, this test for non-parametric data checks if sample and duplicates are originated from the same distribution. 
@@ -138,14 +152,11 @@ t(do.call(rbind,
                                                       "p.value")])))
 ```
 
-#####################################
-# Visualizando os dados
-#####################################
+# 5. DATA VISUALIZATION
 
-library(ggplot2)
-library(hrbrthemes)
+# 5.1 QQ-plot for selected elements
 
-## QQplot do conjunto de dados, comparados a uma normal
+``` R
 ggplot(long, aes(sample = measure, col = Group)) + 
   geom_qq(alpha = .6) + geom_qq_line() + theme(
     legend.position= c(.85,.1),
@@ -155,8 +166,11 @@ ggplot(long, aes(sample = measure, col = Group)) +
   labs(title = 'Q-Q plot by element') +
   scale_fill_continuous(name = "Group", labels = c("Duplicate", "Measure")) +
   facet_wrap(~element, scale = "free") + scale_color_discrete(name = "Group", labels = c("Duplicate", "Measure"))
+```
+[!png] 
+# 5.2 Density plot of Sample and Duplicate
 
-## Density plot comparando as análises e as duplicatas
+``` R
 ggplot(long, aes(x = measure, y = ..density.., fill = Group)) +
   geom_density(alpha = .6) +
   labs(title = 'Probability density by element') +  theme(
@@ -168,14 +182,10 @@ ggplot(long, aes(x = measure, y = ..density.., fill = Group)) +
     name = "Group",
     labels = c("Duplicate", "Measure")
   )
+```
 
 
 
-# Trabalhando com as variáveis numéricas
-df_num <- select(sam,-SAMPLE) %>%
-  select(-TYPE)
-
-write.csv(df_num, "salitre_norm.csv")
 
 #####################################
 # Correlograma
