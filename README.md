@@ -1,12 +1,13 @@
 # K-Means applied to fine-grained rocks clustering
 
-This codes is part of the "Principal Component Analysis and K-Means clustering based on X-Ray Fluorescence Data in fine-grained meta volcano-sedimentary rocks from the Rio Salitre Greenstone Belt, Brazil" written by some Researchers of the Geological Survey of Brazil.
+This codes is part of the "Principal Component Analysis and K-Means clustering based on X-Ray Fluorescence Data in fine-grained meta volcano-sedimentary rocks from the Rio Salitre Greenstone Belt, Brazil" written by the team* of the Geological Survey of Brazil.
 
-Guilherme Ferreira da Silva*
+*Guilherme Ferreira da Silva
+correspondent author
+
 Directory of Geology and Mineral Resources, Geological Survey of Brazil – CPRM, 
 ORCiD https://orcid.org/0000-0002-3675-7289
 guilherme.ferreira@cprm.gov.br
-*correspondent author
 
   # Set up
   ## Reading Data
@@ -30,23 +31,20 @@ for (i in 3:length(df_raw)) {
  }
 ```
 
- Statistical summary
+Statistical summary
 
 ``` R
 df_summary <- t(do.call(rbind,lapply(df_raw, summary)))
 write.csv(df_summary, "df_summary.csv")
 ```
 
-
-
-
-## Filtering for variables that have at least 75% os values higher than lower detection limit
+Filtering for variables that have at least 75% os values higher than lower detection limit
 ``` R
 cut <- .75
 df <- df_raw %>%
   select_if(~sum(!is.na(.x)) >= (cut * nrow(df_raw)))
 ```
-## Replacing <LDL values to 1/2 the minimun of each variable
+Replacing <LDL values to 1/2 the minimun of each variable
 ``` R
 minimo <- {}
 for (i in 3:length(df)) {
@@ -58,7 +56,7 @@ for (i in 3:length(df)) {
 }
 ```
 
-## Data Scaling 
+# Data Scaling 
 
 0-1 Amplitude normalization
 ``` R
@@ -86,17 +84,18 @@ df_log <- df %>%
 
 df_log <- bind_cols(labels, as_data_frame(df_log))
 ```
-#####################################
-# Separando banco de dados
-#####################################
-
-dup <- df_norm %>%
-  filter(TYPE == "D")
-
+# Data frame manipulation
+Splitting samples from duplicates
+``` R
 sam <- df_norm %>%
   filter(TYPE == "S")
 
-# Tranformando em Long Data Frame
+dup <- df_norm %>%
+  filter(TYPE == "D")
+```
+
+Converting in Long Data Frame
+``` R
 descarte <- c("Cl", "P", "Bal", "Sc", "Sn", "Cd", "Sb", "Te", "Ba", "Cs") # ver código abaixo
 
 sam <- sam %>% select(-descarte)
@@ -110,23 +109,34 @@ d_long <- dup %>%
 
 long <- full_join(s_long, d_long) %>%
   rename(Group = TYPE)
+```
 
-#####################################
-# Testes de Significância estatística
-#####################################
+# Statistical Significance Verification
 
-#Teste de Normalidade de Shapiro-Wilk test (Shapiro & Wilk, 1965; Razali & Wah, 2011)
+Shapiro-Wilk test (Shapiro & Wilk, 1965; Razali & Wah, 2011)
+
+For alpha defined as 5%, this test checks if the data sample is normally distributed
+Null hypothesis (H0): The data sample is normally distributed
+Alternative hypothesis (H1): The data sample has another distribution
+
+``` R
 t(do.call(rbind, 
           lapply(X = df %>% select(-SAMPLE, -TYPE), 
                  function(x) shapiro.test(x)[c("statistic", "p.value")]
           )))
+```
+Kruskal-Wallis (Kruskal & Wallis, 1952)
 
-#Teste de variância em postos para dados não paramétricos de Kruskal-Wallis (Kruskal & Wallis, 1952)
+For alhpa defined as 5%, this test for non-parametric data checks if sample and duplicates are originated from the same distribution. 
+Null hypothesis (H0): Sample and duplicate have the same dristibution
+Alternative hypothesis (H1): Sample and duplicate do not come from the same dristibution
+``` R
 t(do.call(rbind,
           lapply(X = df %>% select(-SAMPLE),
                  g = factor(df$TYPE),
                  function (x, g) kruskal.test(x, g)[c("statistic",
                                                       "p.value")])))
+```
 
 #####################################
 # Visualizando os dados
