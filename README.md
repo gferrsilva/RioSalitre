@@ -8,14 +8,14 @@ ORCiD https://orcid.org/0000-0002-3675-7289
 guilherme.ferreira@cprm.gov.br
 *correspondent author
 
-  # Data preparation
+  # Set up
+  ## Reading Data
 ``` R
-library(readr)
 library(tidyverse)
 
 df_raw <- read_tsv("Salitre.txt")
 ```
-
+  ## Data Preparation
 Discarding irrelevant Factor Variables
 
 ``` R
@@ -40,14 +40,14 @@ write.csv(df_summary, "df_summary.csv")
 
 
 
-# Selecionando as variáveis que possuem mais de cut de valores acima do limite de detecção
-
+## Filtering for variables that have at least 75% os values higher than lower detection limit
+``` R
 cut <- .75
 df <- df_raw %>%
   select_if(~sum(!is.na(.x)) >= (cut * nrow(df_raw)))
-
-# Substituindo os valores ausentes por metade do mínimo de cada coluna
-
+```
+## Replacing <LDL values to 1/2 the minimun of each variable
+``` R
 minimo <- {}
 for (i in 3:length(df)) {
   minimo[i] <- min(df[[i]], na.rm = TRUE)  
@@ -56,10 +56,12 @@ for (i in 3:length(df)) {
 for (i in 3:length(df)) {
   df[[i]] <- replace_na(df[[i]], .5*minimo[[i]])
 }
+```
 
-# Normalizando os dados 
+## Data Scaling 
 
-### Normalizando pela amplitude
+0-1 Amplitude normalization
+``` R
 normalize <- function(x) {
   return ((x - min(x, na.rm = TRUE)) / (max(x, na.rm = T) - min(x, na.rm = T)))
 }
@@ -71,7 +73,10 @@ df_norm <- df %>%
   sapply(FUN = normalize)
 
 df_norm <- bind_cols(labels, as_data_frame(df_norm))
-# Normalizando os dados pela pela Transformação Log10
+```
+
+Log10 Transformation
+``` R
 labels <- df %>% select(SAMPLE, TYPE)
 
 df_log <- df %>%
@@ -80,7 +85,7 @@ df_log <- df %>%
   sapply(FUN = log10)
 
 df_log <- bind_cols(labels, as_data_frame(df_log))
-
+```
 #####################################
 # Separando banco de dados
 #####################################
