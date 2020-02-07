@@ -258,6 +258,21 @@ statistic 0.4730813    0.7995515    0.9845759    0.9905358
 p.value   4.281468e-32 1.893626e-21 0.0004077478 0.01435178
 
 ```
+QQ-plot for selected elements
+
+``` R
+ggplot(long, aes(sample = measure, col = Group)) + 
+  geom_qq(alpha = .6) + geom_qq_line() + theme(
+    legend.position= c(.85,.1),
+    panel.spacing = unit(.1, "lines"),
+    strip.text.x = element_text(size = 12)
+  ) + xlab("") + ylab("") +
+  labs(title = 'Q-Q plot by element') +
+  scale_fill_continuous(name = "Group", labels = c("Duplicate", "Measure")) +
+  facet_wrap(~element, scale = "free") + scale_color_discrete(name = "Group", labels = c("Duplicate", "Measure"))
+```
+Output:
+![png](Figures/Q-Qplot.png) 
 
 ## 4.2 Equivalence of data and duplicates
 Kruskal-Wallis (Kruskal & Wallis, 1952)
@@ -285,25 +300,7 @@ p.value   0.6592577 0.6341291 0.1147639 0.5938019 0.1570168 0.3527491 0.7670942 
 statistic 0.1516571 0.560968  0.07235625 3.591698   0.06819939 1.719424  1.859628  1.505758  1.815892
 p.value   0.6969568 0.4538705 0.7879365  0.05806888 0.7939767  0.1897673 0.1726677 0.2197875 0.177803
 ```
-
-# 5. DATA VISUALIZATION
-
-# 5.1 QQ-plot for selected elements
-
-``` R
-ggplot(long, aes(sample = measure, col = Group)) + 
-  geom_qq(alpha = .6) + geom_qq_line() + theme(
-    legend.position= c(.85,.1),
-    panel.spacing = unit(.1, "lines"),
-    strip.text.x = element_text(size = 12)
-  ) + xlab("") + ylab("") +
-  labs(title = 'Q-Q plot by element') +
-  scale_fill_continuous(name = "Group", labels = c("Duplicate", "Measure")) +
-  facet_wrap(~element, scale = "free") + scale_color_discrete(name = "Group", labels = c("Duplicate", "Measure"))
-```
-Output:
-![png](Figures/Q-Qplot.png) 
-# 5.2 Density plot of Sample and Duplicate
+Density plot of Sample and Duplicate
 
 ``` R
 ggplot(long, aes(x = measure, y = ..density.., fill = Group)) +
@@ -319,10 +316,10 @@ ggplot(long, aes(x = measure, y = ..density.., fill = Group)) +
   )
 ```
 Output:
-![png](Figures/Density_plot.png) 
+![png](Figures/Density_plot.png)
 
-# 6. NUMERICAL MODELLING
-# 6.1 Correlation matrix
+# 5. NUMERICAL MODELLING
+# 5.1 Correlation matrix
 AS data is non-parametric, we choose to run the correlation by Spearman ranked method
 
 ```R
@@ -348,12 +345,25 @@ corrplot(M, method="color",# col=col(200),
 Output:
 ![png](Figures/Corrplot.png) 
 
-# 6.2 Principal Components Analysis
+# 5.2 Principal Components Analysis
 ```R
 df_pca <- prcomp(df_num, center = TRUE, scale. = TRUE)
-fviz_eig(df_pca)
-
-# Individuals
+```
+Output
+```
+Importance of components:
+                          PC1    PC2    PC3    PC4     PC5     PC6     PC7     PC8     PC9    PC10
+Standard deviation     2.1663 1.7218 1.2895 1.2667 0.99775 0.83046 0.71226 0.60790 0.58561 0.53317
+Proportion of Variance 0.3129 0.1976 0.1109 0.1070 0.06637 0.04598 0.03382 0.02464 0.02286 0.01895
+Cumulative Proportion  0.3129 0.5105 0.6214 0.7283 0.79470 0.84068 0.87450 0.89914 0.92200 0.94095
+                          PC11    PC12    PC13    PC14    PC15
+Standard deviation     0.51502 0.43340 0.41282 0.37811 0.34528
+Proportion of Variance 0.01768 0.01252 0.01136 0.00953 0.00795
+Cumulative Proportion  0.95864 0.97116 0.98252 0.99205 1.00000
+```
+Visualizing
+``` R
+# a) Individuals
 
 fviz_pca_ind(df_pca,
              col.ind = "cos2", # Color by the quality of representation
@@ -363,7 +373,7 @@ fviz_pca_ind(df_pca,
              geom = c("point")
              )
 
-# Eigenvalues
+# b) Variables
 
 fviz_pca_var(df_pca,
              col.var = "contrib", # Color by contributions to the PC
@@ -371,56 +381,41 @@ fviz_pca_var(df_pca,
              repel = TRUE     # Avoid text overlapping
 )
 
-# Bi-plot
+# c) Scree plot
+fviz_eig(df_pca)
 
-fviz_pca_biplot(df_pca, 
-                #palette = "jco", 
-                addEllipses = TRUE, label = "var")
-               # col.var = "contrib", repel = TRUE,
-                #legend.title = "Species") 
 ```
 Output:
 ![png](Figures/PCA.png)
 
-#####################################
-# Hyperparameter tunning
-#####################################
+# 6. Clustering
 
-## Elbow method
-
-set.seed(123)
-
+# 6.1 Hyperparameter tunning
+a) Elbow method
+``` R
 fviz_nbclust(df_num, kmeans, method = "wss", k.max = 25)
-## Silhoutte method
-
+```
+b) Silhoutte method
+``` R
 fviz_nbclust(df_num, kmeans, method = "silhouette", k.max = 25)
+```
+Output:
+![png](Figures/Elbow_Silhouette.png)
 
-#####################################
-# K-Means Clustering
-#####################################
-
-## Distance matrix
-
-distance <- get_dist(df_num, method = "manhattan")
-
-
-fviz_dist(distance, gradient = list(
-  low = "#00AFBB", mid = "white", high = "#FC4E07"),
-  show_labels = T, lab_size = 5, order = TRUE)
-
-## Clustering
-
+# 6.2 K-Means
+As "3" was the optimum cluster number defined in the las step,.
+``` R
 k3 <- kmeans(df_num, 
              centers = 3, 
              nstart = 50)
-
-df_clus <- as.data.frame(k3["cluster"])
-
-write.csv(k3["cluster"], "cluster.csv")
-
+# Showing plot for the Dim1 and Dim2
 fviz_cluster(k3,
              data = df_num,
              axes = c(1,2))
+```
+Output:
+![png](Figures/Cluster.png)
+
 # REFERENCES
 ## Papers
 Kruskal, William H.; Wallis, W. Allen (1 de dezembro de 1952). Use of Ranks in One-Criterion Variance Analysis. Journal of the American Statistical Association. 47 (260): 583–621. ISSN 0162-1459. doi:10.1080/01621459.1952.10483441
