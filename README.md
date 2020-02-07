@@ -1,4 +1,12 @@
-# K-Means-clustering-based-in-pXRF-data-in-fine-grained-rocks
+# K-Means applied to fine-grained rocks clustering
+
+This codes is part of the "Principal Component Analysis and K-Means clustering based on X-Ray Fluorescence Data in fine-grained meta volcano-sedimentary rocks from the Rio Salitre Greenstone Belt, Brazil" written by some Researchers of the Geological Survey of Brazil.
+
+Guilherme Ferreira da Silva*
+Directory of Geology and Mineral Resources, Geological Survey of Brazil – CPRM, 
+ORCiD https://orcid.org/0000-0002-3675-7289
+guilherme.ferreira@cprm.gov.br
+*correspondent author
 
   # Data preparation
 ``` R
@@ -6,8 +14,11 @@ library(readr)
 library(tidyverse)
 
 df_raw <- read_tsv("Salitre.txt")
+```
 
-# Discarding irrelevant Factor Variables
+Discarding irrelevant Factor Variables
+
+``` R
 trash <- c("Index", "Date", "Duration", "CORE", "Time")
 
 df_raw <- df_raw %>%
@@ -19,7 +30,7 @@ for (i in 3:length(df_raw)) {
  }
 ```
 
-  ## Statistical summary
+ Statistical summary
 
 ``` R
 df_summary <- t(do.call(rbind,lapply(df_raw, summary)))
