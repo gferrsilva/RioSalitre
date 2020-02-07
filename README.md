@@ -1,33 +1,33 @@
 # K-Means-clustering-based-in-pXRF-data-in-fine-grained-rocks
 
-  ## Data preparation
+  # Data preparation
 ``` R
 library(readr)
 library(tidyverse)
 
 df_raw <- read_tsv("Salitre.txt")
 
+# Discarding irrelevant Factor Variables
 trash <- c("Index", "Date", "Duration", "CORE", "Time")
 
 df_raw <- df_raw %>%
   select(-trash)
+
+# Defining variables as numbers
+for (i in 3:length(df_raw)) {
+  df_raw[[i]] <- as.numeric(df_raw[[i]])
+ }
+```
+
+  ## Statistical summary
+
+``` R
+df_summary <- t(do.call(rbind,lapply(df_raw, summary)))
+write.csv(df_summary, "df_summary.csv")
 ```
 
 
-#Discartando colunas que não interessam
 
-
-
-# Gerando o Resumo estatístico
-
-df_summary <- t(do.call(rbind,lapply(df_raw, summary)))
-write.csv(df_summary, "df_summary.csv")
-
-# Corrigindo o tipo de variável no banco de dados
-
-for (i in 3:length(df_raw)) {
-  df_raw[[i]] <- as.numeric(df_raw[[i]])
-}
 
 # Selecionando as variáveis que possuem mais de cut de valores acima do limite de detecção
 
