@@ -1,9 +1,8 @@
 # K-Means applied to fine-grained rocks clustering
 
-This codes is part of the "Principal Component Analysis and K-Means clustering based on X-Ray Fluorescence Data in fine-grained meta volcano-sedimentary rocks from the Rio Salitre Greenstone Belt, Brazil" written by the team* of the Geological Survey of Brazil.
+This codes is part of the "Principal Component Analysis and K-Means clustering based on X-Ray Fluorescence Data in fine-grained meta volcano-sedimentary rocks from the Rio Salitre Greenstone Belt, Brazil" written by the team of the Directory of Geology and Mineral Resources from the Geological Survey of Brazil – CPRM.
 
 *Guilherme Ferreira da Silva
-Directory of Geology and Mineral Resources, Geological Survey of Brazil – CPRM, 
 guilherme.ferreira@cprm.gov.br
 
   # 1. SETTINGS
