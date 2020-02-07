@@ -3,10 +3,7 @@
 This codes is part of the "Principal Component Analysis and K-Means clustering based on X-Ray Fluorescence Data in fine-grained meta volcano-sedimentary rocks from the Rio Salitre Greenstone Belt, Brazil" written by the team* of the Geological Survey of Brazil.
 
 *Guilherme Ferreira da Silva
-correspondent author
-
 Directory of Geology and Mineral Resources, Geological Survey of Brazil – CPRM, 
-ORCiD https://orcid.org/0000-0002-3675-7289
 guilherme.ferreira@cprm.gov.br
 
   # 1. SETTINGS
