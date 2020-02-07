@@ -267,12 +267,15 @@ Razali, Nornadiah; Wah, Yap Bee (2011). "Power comparisons of Shapiro–Wilk, Ko
 
 Shapiro, S. S.; Wilk, M. B. (1965). An analysis of variance test for normality (complete samples). Biometrika. 52 (3–4): 591–611. doi:10.1093/biomet/52.3-4.591. JSTOR 2333709. MR 0205384. p. 593
 
-## Website
-## Correlation Matrix
+## Websites
+Correlation Matrix
 http://www.sthda.com/english/wiki/visualize-correlation-matrix-using-correlogram
-### PCA
+
+PCA
 https://towardsdatascience.com/dimensionality-reduction-does-pca-really-improve-classification-outcome-6e9ba21f0a32
-### PCA for Machine Learning
+
+PCA for Machine Learning
 https://medium.com/apprentice-journal/pca-application-in-machine-learning-4827c07a61db
-### K-Means Clustering
+
+K-Means Clustering
 https://uc-r.github.io/kmeans_clustering
