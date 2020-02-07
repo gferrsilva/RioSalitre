@@ -145,7 +145,7 @@ write.csv(df_num, "salitre_norm.csv")
 ## 4.1 Check of distribution
 Shapiro-Wilk test (Shapiro & Wilk, 1965; Razali & Wah, 2011)
 
-For alpha defined as 5%, this test checks if the data sample is normally distributed
+For alpha defined as 5%, this test checks if the data sample is normally distributed # /t
 Null hypothesis (H0): The data sample is normally distributed
 Alternative hypothesis (H1): The data sample has another distribution
 
