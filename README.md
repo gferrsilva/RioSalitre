@@ -301,6 +301,7 @@ ggplot(long, aes(sample = measure, col = Group)) +
   scale_fill_continuous(name = "Group", labels = c("Duplicate", "Measure")) +
   facet_wrap(~element, scale = "free") + scale_color_discrete(name = "Group", labels = c("Duplicate", "Measure"))
 ```
+Output:
 ![png](Figures/Q-Qplot.png) 
 # 5.2 Density plot of Sample and Duplicate
 
@@ -317,19 +318,14 @@ ggplot(long, aes(x = measure, y = ..density.., fill = Group)) +
     labels = c("Duplicate", "Measure")
   )
 ```
+Output:
+![png](Figures/Density_plot.png) 
 
+# 6. NUMERICAL MODELLING
+# 6.1 Correlation matrix
+AS data is non-parametric, we choose to run the correlation by Spearman ranked method
 
-
-
-#####################################
-# Correlograma
-#####################################
-
-# Rodando o correlograma: http://www.sthda.com/english/wiki/visualize-correlation-matrix-using-correlogram
-  ## Após uma primeira análise no correlograma, reparei que os elementos abaixo
-  ## tinham uma alta correlação entre si, mas não tinha significado aparente
-descarte <- c("Cl", "P", "Bal", "Sc", "Sn", "Cd", "Sb", "Te", "Ba", "Cs")
-
+```R
 M <- cor(df_num, method = "spearman")
 
 library(corrplot)
@@ -348,23 +344,16 @@ corrplot(M, method="color",# col=col(200),
          number.font = 2,
          number.digits = 2
 )
+```
+Output:
+![png](Figures/Corrplot.png) 
 
-#####################################
-# Análise de Componentes Principais
-#####################################
-
-## Script gerado com auxílio do tutorial disponível em: http://www.sthda.com/english/articles/31-principal-component-methods-in-r-practical-guide/118-principal-component-analysis-in-r-prcomp-vs-princomp/
-
+# 6.2 Principal Components Analysis
+```R
 df_pca <- prcomp(df_num, center = TRUE, scale. = TRUE)
-
-summary(df_pca)
-
-library(factoextra)
-
-# Visualizando os Autovalores
 fviz_eig(df_pca)
 
-# Gráfico de indivíduos: aqueles de perfil similar serão agrupados conjuntamente
+# Individuals
 
 fviz_pca_ind(df_pca,
              col.ind = "cos2", # Color by the quality of representation
@@ -374,7 +363,7 @@ fviz_pca_ind(df_pca,
              geom = c("point")
              )
 
-# Gráfico de variáveis: variáveis correlacionáveis apontam para a mesma direção
+# Eigenvalues
 
 fviz_pca_var(df_pca,
              col.var = "contrib", # Color by contributions to the PC
@@ -382,13 +371,16 @@ fviz_pca_var(df_pca,
              repel = TRUE     # Avoid text overlapping
 )
 
-# Gráfico de indivíduos e variáveis
+# Bi-plot
 
 fviz_pca_biplot(df_pca, 
                 #palette = "jco", 
                 addEllipses = TRUE, label = "var")
                # col.var = "contrib", repel = TRUE,
                 #legend.title = "Species") 
+```
+Output:
+![png](Figures/PCA.png)
 
 #####################################
 # Hyperparameter tunning
