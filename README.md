@@ -301,7 +301,7 @@ ggplot(long, aes(sample = measure, col = Group)) +
   scale_fill_continuous(name = "Group", labels = c("Duplicate", "Measure")) +
   facet_wrap(~element, scale = "free") + scale_color_discrete(name = "Group", labels = c("Duplicate", "Measure"))
 ```
-![png](figures/density_plot.png) 
+![png](density_plot.png) 
 # 5.2 Density plot of Sample and Duplicate
 
 ``` R
