@@ -1,6 +1,6 @@
 # K-Means applied to fine-grained rocks clustering
 
-This codes is part of the "Principal Component Analysis and K-Means clustering based on X-Ray Fluorescence Data in fine-grained meta volcano-sedimentary rocks from the Rio Salitre Greenstone Belt, Brazil" written by the team of the Directory of Geology and Mineral Resources from the Geological Survey of Brazil – CPRM.
+This code is part of the "Principal Component Analysis and K-Means clustering based on X-Ray Fluorescence Data in fine-grained meta volcano-sedimentary rocks from the Rio Salitre Greenstone Belt, Brazil" written by the team of the Directory of Geology and Mineral Resources from the Geological Survey of Brazil – CPRM.
 
 *Guilherme Ferreira da Silva
 guilherme.ferreira@cprm.gov.br
@@ -286,9 +286,9 @@ Output:
 ## 4.2 Equivalence of data and duplicates
 Kruskal-Wallis (Kruskal & Wallis, 1952)
 
-For alhpa defined as 5%, this test for non-parametric data checks if sample and duplicates are originated from the same distribution. 
+For alpha defined as 5%, this test for non-parametric data checks if sample and duplicates are originated from the same distribution. 
 Null hypothesis (H0): Sample and duplicate have the same dristibution
-Alternative hypothesis (H1): Sample and duplicate do not come from the same dristibution
+Alternative hypothesis (H1): Sample and duplicate do not come from the same distribution
 ``` R
 t(do.call(rbind,
           lapply(X = df %>% select(-SAMPLE),
@@ -329,7 +329,7 @@ Output:
 
 # 5. NUMERICAL MODELLING
 # 5.1 Correlation matrix
-AS data is non-parametric, we choose to run the correlation by Spearman ranked method
+As data is non-parametric, we choose to run the correlation by Spearman ranked method
 
 ```R
 M <- cor(df_num, method = "spearman")
