@@ -243,8 +243,10 @@ $ measure <dbl> 0.20468861, 0.13743784, 0.20345726, 0.19303812, 0.18446602, 0.17
 ## 4.1 Check of distribution
 Shapiro-Wilk test (Shapiro & Wilk, 1965; Razali & Wah, 2011)
 
-For alpha defined as 5%, this test checks if the data sample is normally distributed # /t
+For alpha defined as 5%, this test checks if the data sample is normally distributed.
+
 Null hypothesis (H0): The data sample is normally distributed
+
 Alternative hypothesis (H1): The data sample has another distribution
 
 ``` R
@@ -289,8 +291,10 @@ Output:
 Kruskal-Wallis (Kruskal & Wallis, 1952)
 
 For alpha defined as 5%, this test for non-parametric data checks if sample and duplicates are originated from the same distribution. 
-Null hypothesis (H0): Sample and duplicate have the same dristibution
-Alternative hypothesis (H1): Sample and duplicate do not come from the same distribution
+
+Null hypothesis (H0): Sample and duplicate have the same dristibution.
+
+Alternative hypothesis (H1): Sample and duplicate do not come from the same distribution.
 ``` R
 t(do.call(rbind,
           lapply(X = df %>% select(-SAMPLE),
