@@ -431,6 +431,48 @@ fviz_cluster(k3,
 Output:
 ![png](Figures/Cluster.png)
 
+# 6.3 Strip-log of drill core samples
+``` R
+# Selecting elements to show
+
+elems <- c("Cr", "Cu", "Fe", "S", "Si", "Sr", "Ti", "Zr")
+
+# Binding results of clustering
+
+df_clus <- df_raw %>%
+  filter(TYPE == "S") %>%
+  bind_cols(as.data.frame(k3["cluster"]))
+# Converting to a long data frame
+df_elems <- df_clus %>% 
+  select(CORE, FROM, TYPE, elems, cluster) %>%
+  gather(key = "element", value = "measure", 4:(length(elems)+3), na.rm = TRUE)
+df_elems$FROM <- as.numeric(df_elems$FROM)
+
+# Graph
+
+## Plot 1: Bar graph with kew values of the Clustering
+
+ggplot(df_elems %>% filter(TYPE == "S"), aes(
+  x = 1, y = FROM, col = factor(cluster), fill = factor(cluster))) +
+  geom_point(shape = 22, size = 10, show.legend = FALSE) +
+  scale_y_continuous(trans = "reverse") +
+  scale_x_continuous() + xlab("") +
+  facet_grid(CORE ~ ., scale = "free") + theme_classic() +
+  theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+
+## Plot 2: line graph of elements distribution versus the core length
+ggplot(df_elems %>% filter(TYPE == "S"), aes(x = FROM, y = measure)) + 
+  geom_line(size = .7) +# geom_point(aes(col = factor(cluster))) +
+  scale_x_continuous(trans = "reverse") +
+  facet_grid(CORE ~ element, scale = "free") +
+  coord_flip() + theme_classic() +
+  theme(axis.text.x = element_text(angle = -90, size = 8),
+                          axis.text.y = element_text(size = 8),
+                          panel.spacing = unit(.5, "lines"))
+```
+Output:
+![png](Figures/Core_clusterized.png)
+
 # REFERENCES
 ## Papers
 Kruskal, William H.; Wallis, W. Allen (1 de dezembro de 1952). Use of Ranks in One-Criterion Variance Analysis. Journal of the American Statistical Association. 47 (260): 583–621. ISSN 0162-1459. doi:10.1080/01621459.1952.10483441
