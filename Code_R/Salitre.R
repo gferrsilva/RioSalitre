@@ -19,7 +19,7 @@
 # Setting up the enviroment
 #####
 
-setwd("~/Salitre")
+setwd("~/GitHub/RioSalitre")
 set.seed(123)
 
 #####
@@ -124,20 +124,20 @@ stat_chull <- function(mapping = NULL, data = NULL, geom = "polygon",
 # Importing ----
 
 # Raw data from pXRF txt file
-raw <- read_tsv("Salitre_full_corr.txt") %>% # Raw data from txt file
+raw <- read_delim("Data/salitre_corr.txt", delim = '/t') %>% # Raw data from txt file
   separate(col = "SAMPLE", into = c("CORE", "FROM", "ID"), sep = "-") %>%
   select(-c("Date", "Duration", "Time", "ID", "Bal", "K")) %>%
   mutate_at(c(3,5:51), as.numeric, length = 2) %>% # Converting columns to numeric
   mutate_at(c(1:2,4), as.factor)
 # Key values of lithotypes
-litho <- read_tsv("litho_apa3001.txt",col_types = list('f','d','f'))
+litho <- read_tsv("Data/lithology.txt",col_types = list('f','d','f'))
 
 # Summary ----
 
 # Statistical Summary
 df_sum <- as.data.frame(sapply(sapply(raw, summary)[5:51], cbind))
 row.names(df_sum) <- c('Min', '1st Qu.', 'Median', 'Mean', '3rd Qu.', 'Max.', 'NA')
-write.csv(df_sum, "statisticalsummary.csv")
+write.csv(df_sum, "Tables/statisticalsummary.csv")
 
 # Data wrangling ----
 
@@ -300,15 +300,15 @@ k2_fil <- kmeans(df_fil %>%
                  centers = 2, 
                  nstart = 50,iter.max = 100)
 ## K-Means plot for raw data
-fviz_cluster(k2_raw,
+(kmraw <- fviz_cluster(k2_raw,
              data = pca_raw$x[,1:2],
              axes = c(1,2), stand = F, ellipse = T,
-             geom = c('point'), main = 'K-Means Cluster (Raw Data)')
+             geom = c('point'), main = 'K-Means Cluster (Raw Data)'))
 ## K-Means plot for filtered data
-fviz_cluster(k2_fil,
+(kmfil <- fviz_cluster(k2_fil,
              data = pca_fil$x[,1:2],
              axes = c(1,2), stand = F, ellipse = T,
-             geom = c('point'), main = 'K-Means Cluster (Filtered Data)')
+             geom = c('point'), main = 'K-Means Cluster (Filtered Data)'))
 
 # Model-Based Cluster ----
 
@@ -317,7 +317,7 @@ summary(mclus_raw)
 mclus_fil <- Mclust(pca_fil$x[,1:2])
 summary(mclus_fil)
 ## MClus plot for raw data
-fviz_cluster(mclus_raw,
+mbraw <- fviz_cluster(mclus_raw,
              data = pca_raw$x,
              axes = c(1,2), stand = F, ellipse = T, 
              ellipse.type = 'convex', 
@@ -329,7 +329,7 @@ fviz_cluster(mclus_fil,
              axes = c(1,2), stand = F, ellipse = T, 
              ellipse.type = 'convex', 
              choose.vars = c(1,2), geom = c('point'),
-             main = 'MB Cluster (Raw Data)')
+             main = 'MB Cluster (Filtered Data)')
 
 #####
 # Data Visualization
@@ -417,10 +417,26 @@ df_norm %>%
              alpha = .6)
 
 
-CairoPDF(file = 'Figures/Vetores/exploratory_graphs.PDF', width = 8, height = 6)
+CairoPDF(file = 'Figures/exploratory_graphs.PDF', width = 8, height = 6)
 print(p1)
 print(p2)
 print(p3)
+print(kmraw)
+print(kmfil)
+## MClus plot for raw data
+mbraw <- fviz_cluster(mclus_raw,
+                      data = pca_raw$x,
+                      axes = c(1,2), stand = F, ellipse = T, 
+                      ellipse.type = 'convex', 
+                      choose.vars = c(1,2), geom = c('point'),
+                      main = 'MB Cluster (Raw Data)')
+## MClus plot for filterd data
+fviz_cluster(mclus_fil,
+             data = pca_fil$x,
+             axes = c(1,2), stand = F, ellipse = T, 
+             ellipse.type = 'convex', 
+             choose.vars = c(1,2), geom = c('point'),
+             main = 'MB Cluster (Filtered Data)')
 dev.off()
 
 
