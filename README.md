@@ -48,7 +48,7 @@ Kotaro Uchigasaki
 
 ## Acknoledgements
 
-Many thanks to (Marcos Vinícius Ferreira)[https://github.com/marcosbr] for the code revising.
+Many thanks to [Marcos Vinícius Ferreira](https://github.com/marcosbr) for the code revising.
 
 # REFERENCES
 ## Papers
