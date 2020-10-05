@@ -2,9 +2,9 @@
 # Code of Quality Control processing of portable X-Ray Fluorescence analysis
 # Script follows
 # 
-# version: 1.1 (2020/06/24)
+# version: 1.2 (2020/10/05)
 #
-# Last modifications: Code cleaning
+# Last modifications: Code cleaning, import('ggplot2')
 #
 # -----
 # Process flow: 
@@ -34,6 +34,7 @@ library(tidyverse)
 library(Cairo)
 library(janitor)
 library(purrr)
+library(ggplot2)
 
 #####
 # Built-in Functions
