@@ -1,4 +1,4 @@
-# K-Means and Model-Based Clustering in pXRF data
+# K-Means and Model-Based Clustering in raw and filtered pXRF data
 
 This code is part of the preprint "Model-Based Clustering for unsupervised drill core pseudo-log generation and comparison with K-Means in raw and filtered data" written by researchers of the Directory of Geology and Mineral Resources from the [Geological Survey of Brazil – CPRM](https://www.cprm.gov.br/en/).
 
@@ -46,7 +46,7 @@ Kotaro Uchigasaki
 ## Code author:
 [Guilherme Ferreira da Silva](https://www.researchgate.net/profile/Guilherme_Silva26), (E-mail: guilherme.ferreira@cprm.gov.br)
 
-## Acknoledgements
+## Acknowledgements
 
 Many thanks to [Marcos Vinícius Ferreira](https://github.com/marcosbr) for the code revising.
 
