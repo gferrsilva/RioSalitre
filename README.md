@@ -1,6 +1,6 @@
 # K-Means and Model-Based Clustering in pXRF data
 
-This code is part of the preprint "Comparison of K-Means and Model-Based Clustering methods for drill core pseudo-log generation based on X-Ray Fluorescence Data" written by researchers of the Directory of Geology and Mineral Resources from the [Geological Survey of Brazil – CPRM](https://www.cprm.gov.br/en/).
+This code is part of the preprint "Model-Based Clustering for unsupervised drill core pseudo-log generation and comparison with K-Means in raw and filtered data" written by researchers of the Directory of Geology and Mineral Resources from the [Geological Survey of Brazil – CPRM](https://www.cprm.gov.br/en/).
 
 It was developed in R Language, using the RStudio Enviroment with [Tidyverse set of packages](https://www.tidyverse.org/) and statiscal packages [Corrplot](https://www.rdocumentation.org/packages/corrplot/versions/0.84) and [Factoextra](https://www.rdocumentation.org/packages/factoextra/versions/1.0.3) por quantitative analysis.
 
@@ -24,8 +24,7 @@ library(factoextra) # K-Means Clustering and PCA
 library(mclust) # Model-Based Clustering
 library(janitor) #Dates and times in the excel notation
 ```
-## Code author:
-[Guilherme Ferreira da Silva](https://www.researchgate.net/profile/Guilherme_Silva26), (E-mail: guilherme.ferreira@cprm.gov.br)
+
 
 # Abstract
 
@@ -37,12 +36,19 @@ Clustering comparison, Portable X-Ray Fluorescence, Unsupervised Learning
 ## Paper authors:
 ```
 Guilherme Ferreira da Silva
+João Henrique Larizzatti
 Anderson Dourado Rodrigues Silva
 Carina Graciniana Lopes
-João Henrique Larizzatti
 Evandro Luiz Klein
 Kotaro Uchigasaki
 ```
+
+## Code author:
+[Guilherme Ferreira da Silva](https://www.researchgate.net/profile/Guilherme_Silva26), (E-mail: guilherme.ferreira@cprm.gov.br)
+
+## Acknoledgements
+
+Many thanks to (Marcos Vinícius Ferreira)[https://github.com/marcosbr] for the code revising.
 
 # REFERENCES
 ## Papers
